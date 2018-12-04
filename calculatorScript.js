@@ -1,6 +1,9 @@
 var displayValue = "";
-var operation;
-var register = 0;
+var fisrtNumber = null;
+var secondNumber = null;
+var operation = null;
+var register = null;
+var equalPressed = 0;
 var display = document.getElementById('display');
 
 document.getElementById('clear').onclick = function(){
@@ -40,16 +43,16 @@ document.getElementById('nine').onclick = function(){
     pushToDisplay('9');
 }
 document.getElementById('plus').onclick = function(){
-    adition();
+  operationPressed(0);
 }
 document.getElementById('minus').onclick = function(){
-    subtraction();
+  operationPressed(1);
 }
 document.getElementById('times').onclick = function(){
-    times();
+  operationPressed(2);
 }
 document.getElementById('division').onclick = function(){
-    division();
+  operationPressed(3);
 }
 document.getElementById('dot').onclick = function(){
   if(displayValue == ""){
@@ -59,75 +62,67 @@ document.getElementById('dot').onclick = function(){
   }
 }
 document.getElementById('equal').onclick = function(){
-    equal();
+  equal();
+  equalPressed++;  
 }
 
 function pushToDisplay(value){
   displayValue = displayValue + value;
-  display.innerHTML = displayValue / 1;
-  console.log(register);
+  if (operation == null){
+    fisrtNumber = displayValue;
+  } else {
+    secondNumber = displayValue;
+  }
+  display.innerHTML = 1 * displayValue;
+  calculateToRegister();
+  console.log("n1 = " + fisrtNumber, "n2 = " + secondNumber, "reg = " + register);
 }
 
 function clear() {
+  operation = null;
   displayValue = "";
-  register = 0;
-  pushToDisplay(displayValue);
+  fisrtNumber = null;
+  secondNumber = null;
+  register = null;
+  display.innerHTML = displayValue;
 }
 
-function adition(){
-  operation = 0;
-  register += 1 * displayValue;
-  display.innerHTML = register;
-  displayValue = "";
-}
-
-function subtraction(){
-  operation = 1;
-  register = parseFloat((-1) * displayValue - register).toPrecision(10) * 1;
-  display.innerHTML = (-1) * register;
-  displayValue = "";
-}
-
-function times(){
-  if (register === 0){
-    register = 1;
+function operationPressed (operationNumber) {
+  equalPressed = false;
+  if(register != null){
+    fisrtNumber = register;
   }
-  operation = 2;
-  register *= displayValue;
-  display.innerHTML = register;
+  secondNumber = null;
   displayValue = "";
+  operation = operationNumber;
+  display.innerHTML = (register != null) ? register : 0;
 }
 
-function division(){
-  if (register === 0){
-    register = 1 * displayValue;
-  } else {
-    register /= displayValue;
-    register = parseFloat(register).toPrecision(13) * 1;
+function equal (){
+  fisrtNumber = register;
+  if (equalPressed != 0){
+    calculateToRegister();
   }
-  operation = 3;
-  display.innerHTML = register;
-  displayValue = "";
+  var finalResult = register;
+  display.innerHTML = finalResult;
+  console.log("n1 = " + fisrtNumber, "n2 = " + secondNumber, "reg = " + register);
 }
 
-function equal(){
+function calculateToRegister() {
   switch (operation) {
     case 0:
-      adition();
+      register = parseFloat(fisrtNumber) + parseFloat(secondNumber);
       break;
     case 1:
-      subtraction();
+      register = parseFloat(fisrtNumber) - parseFloat(secondNumber);
       break;
     case 2:
-      times();
+      register = parseFloat(fisrtNumber) * parseFloat(secondNumber);
       break;
     case 3:
-      division();
-      break;
-    case 4:
-      break;
+      register = parseFloat(fisrtNumber) / parseFloat(secondNumber);
+      break;  
     default:
+      break;
   }
-  pushToDisplay(register);
-  register = 0;
 }
