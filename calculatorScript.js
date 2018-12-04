@@ -6,63 +6,14 @@ var register = null;
 var equalPressed = 0;
 var display = document.getElementById('display');
 
-document.getElementById('clear').onclick = function(){
-    clear();
-}
-document.getElementById('zero').onclick = function(){
-   getInput('0');
-}
-document.getElementById('one').onclick = function(){
-   getInput('1');
-}
-document.getElementById('two').onclick = function(){
-   getInput('2');
-}
-document.getElementById('three').onclick = function(){
-   getInput('3');
-}
-document.getElementById('four').onclick = function(){
-   getInput('4');
-}
-document.getElementById('five').onclick = function(){
-   getInput('5');
-}
-document.getElementById('six').onclick = function(){
-   getInput('6');
-}
-document.getElementById('seven').onclick = function(){
-   getInput('7');
-}
-document.getElementById('eight').onclick = function(){
-   getInput('8');
-}
-document.getElementById('nine').onclick = function(){
-   getInput('9');
-}
-document.getElementById('nine').onclick = function(){
-   getInput('9');
-}
-document.getElementById('plus').onclick = function(){
-  operationPressed("+");
-}
-document.getElementById('minus').onclick = function(){
-  operationPressed("-");
-}
-document.getElementById('times').onclick = function(){
-  operationPressed("x");
-}
-document.getElementById('division').onclick = function(){
-  operationPressed("/");
-}
-
-/*keys.onclick = function(event){
+keys.onclick = function(event){
   button = event.target;
   if(button.className.indexOf("number") > -1){
     getInput(button.textContent);
   } else if (button.className.indexOf("operator") > -1) {
     operationPressed(button.textContent);
   }
-}*/
+}
 
 document.getElementById('dot').onclick = function(){
   if(displayValue == ""){
@@ -71,6 +22,7 @@ document.getElementById('dot').onclick = function(){
    getInput('.');
   }
 }
+
 document.getElementById('equal').onclick = function(){
   equal();
   equalPressed++;  
@@ -83,13 +35,16 @@ document.getElementById('clear').onclick = function(){
 function printToDisplay(output) {
   var outputLength = output.length;
   output = parseFloat(output);
-
+  console.log(output);
   if (outputLength > 14){
     output = output.toExponential();
     outputLength = output.length;
     if (outputLength > 14){
-      output = (1 * output).toExponential(10);
+      output = (1 * output).toExponential(9);
     }
+  }
+  if(isNaN(output)){
+    output = "Math Error";
   }
   display.innerHTML = output;
 }
@@ -101,9 +56,8 @@ function getInput(value){
   } else {
     secondNumber = displayValue;
   }
-  printToDisplay(displayValue);
+  printToDisplay(displayValue.toString());
   calculateToRegister();
-  console.log("n1 = " + fisrtNumber, "n2 = " + secondNumber, "reg = " + register);
 }
 
 function clear() {
@@ -112,7 +66,7 @@ function clear() {
   fisrtNumber = 0;
   secondNumber = null;
   register = null;
-  printToDisplay(displayValue);
+  printToDisplay(displayValue.toString());
 }
 
 function operationPressed (operationNumber) {
@@ -137,7 +91,6 @@ function equal (){
   }
   var finalResult = register;
   printToDisplay(finalResult.toString());
-  console.log("n1 = " + fisrtNumber, "n2 = " + secondNumber, "reg = " + register);
 }
 
 function calculateToRegister() {
